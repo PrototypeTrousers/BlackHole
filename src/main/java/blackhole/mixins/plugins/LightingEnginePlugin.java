@@ -1,6 +1,6 @@
-package me.jellysquid.mods.phosphor.mixins.plugins;
+package blackhole.mixins.plugins;
 
-import me.jellysquid.mods.phosphor.mod.PhosphorConfig;
+import blackhole.mod.PhosphorConfig;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

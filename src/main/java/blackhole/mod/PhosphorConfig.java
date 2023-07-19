@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod;
+package blackhole.mod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

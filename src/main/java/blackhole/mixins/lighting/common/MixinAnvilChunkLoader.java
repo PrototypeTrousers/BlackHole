@@ -1,8 +1,8 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.common;
+package blackhole.mixins.lighting.common;
 
-import me.jellysquid.mods.phosphor.api.IChunkLightingData;
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
-import me.jellysquid.mods.phosphor.mod.world.lighting.LightingHooks;
+import blackhole.api.IChunkLightingData;
+import blackhole.api.ILightingEngineProvider;
+import blackhole.mod.world.lighting.LightingHooks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

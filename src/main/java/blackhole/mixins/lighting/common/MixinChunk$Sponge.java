@@ -1,7 +1,7 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.common;
+package blackhole.mixins.lighting.common;
 
 
-import me.jellysquid.mods.phosphor.mod.world.lighting.LightingHooks;
+import blackhole.mod.world.lighting.LightingHooks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;

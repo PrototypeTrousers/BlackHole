@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.core;
+package blackhole.core;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;

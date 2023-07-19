@@ -1,6 +1,6 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.client;
+package blackhole.mixins.lighting.client;
 
-import me.jellysquid.mods.phosphor.mod.PhosphorMod;
+import blackhole.mod.PhosphorMod;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;

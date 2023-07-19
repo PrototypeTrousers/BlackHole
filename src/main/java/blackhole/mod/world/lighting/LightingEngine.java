@@ -1,11 +1,10 @@
-package me.jellysquid.mods.phosphor.mod.world.lighting;
+package blackhole.mod.world.lighting;
 
-import atomicstryker.dynamiclights.client.DynamicLights;
-import me.jellysquid.mods.phosphor.api.IChunkLighting;
-import me.jellysquid.mods.phosphor.api.ILightingEngine;
-import me.jellysquid.mods.phosphor.mixins.plugins.LightingEnginePlugin;
-import me.jellysquid.mods.phosphor.mod.PhosphorMod;
-import me.jellysquid.mods.phosphor.mod.collections.PooledLongQueue;
+import blackhole.api.IChunkLighting;
+import blackhole.api.ILightingEngine;
+import blackhole.mixins.plugins.LightingEnginePlugin;
+import blackhole.mod.PhosphorMod;
+import blackhole.mod.collections.PooledLongQueue;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;

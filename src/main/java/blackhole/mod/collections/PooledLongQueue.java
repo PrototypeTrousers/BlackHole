@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod.collections;
+package blackhole.mod.collections;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

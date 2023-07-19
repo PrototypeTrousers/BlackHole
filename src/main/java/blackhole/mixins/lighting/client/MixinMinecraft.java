@@ -1,6 +1,6 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.client;
+package blackhole.mixins.lighting.client;
 
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
+import blackhole.api.ILightingEngineProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.profiler.Profiler;

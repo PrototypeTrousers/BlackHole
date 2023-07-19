@@ -1,7 +1,7 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.common;
+package blackhole.mixins.lighting.common;
 
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
-import me.jellysquid.mods.phosphor.mod.world.lighting.LightingEngine;
+import blackhole.api.ILightingEngineProvider;
+import blackhole.mod.world.lighting.LightingEngine;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;

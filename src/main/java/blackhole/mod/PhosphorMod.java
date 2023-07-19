@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod;
+package blackhole.mod;
 
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;

@@ -1,6 +1,6 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.common;
+package blackhole.mixins.lighting.common;
 
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
+import blackhole.api.ILightingEngineProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.ChunkProviderServer;
 import org.spongepowered.asm.mixin.Final;

@@ -1,11 +1,11 @@
-package me.jellysquid.mods.phosphor.mixins.lighting.common;
+package blackhole.mixins.lighting.common;
 
-import me.jellysquid.mods.phosphor.api.IChunkLighting;
-import me.jellysquid.mods.phosphor.api.IChunkLightingData;
-import me.jellysquid.mods.phosphor.api.ILightingEngine;
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
-import me.jellysquid.mods.phosphor.mod.world.WorldChunkSlice;
-import me.jellysquid.mods.phosphor.mod.world.lighting.LightingHooks;
+import blackhole.api.IChunkLighting;
+import blackhole.api.IChunkLightingData;
+import blackhole.api.ILightingEngine;
+import blackhole.api.ILightingEngineProvider;
+import blackhole.mod.world.WorldChunkSlice;
+import blackhole.mod.world.lighting.LightingHooks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

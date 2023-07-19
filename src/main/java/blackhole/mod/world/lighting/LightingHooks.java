@@ -1,10 +1,10 @@
-package me.jellysquid.mods.phosphor.mod.world.lighting;
+package blackhole.mod.world.lighting;
 
-import me.jellysquid.mods.phosphor.api.IChunkLighting;
-import me.jellysquid.mods.phosphor.api.IChunkLightingData;
-import me.jellysquid.mods.phosphor.api.ILightingEngine;
-import me.jellysquid.mods.phosphor.api.ILightingEngineProvider;
-import me.jellysquid.mods.phosphor.mod.PhosphorMod;
+import blackhole.api.IChunkLighting;
+import blackhole.api.IChunkLightingData;
+import blackhole.api.ILightingEngine;
+import blackhole.api.ILightingEngineProvider;
+import blackhole.mod.PhosphorMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

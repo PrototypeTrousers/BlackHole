@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod.world.lighting;
+package blackhole.mod.world.lighting;
 
 import atomicstryker.dynamiclights.client.DynamicLights;
 import net.minecraft.block.state.IBlockState;

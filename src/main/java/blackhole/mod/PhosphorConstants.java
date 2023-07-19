@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod;
+package blackhole.mod;
 
 final class PhosphorConstants {
     static final String MOD_ID = "phosphor-lighting";

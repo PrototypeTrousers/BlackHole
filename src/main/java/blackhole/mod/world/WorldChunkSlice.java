@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.mod.world;
+package blackhole.mod.world;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

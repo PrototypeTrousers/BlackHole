@@ -1,4 +1,4 @@
-package me.jellysquid.mods.phosphor.api;
+package blackhole.api;
 
 public interface ILightingEngineProvider {
     ILightingEngine getLightingEngine();
