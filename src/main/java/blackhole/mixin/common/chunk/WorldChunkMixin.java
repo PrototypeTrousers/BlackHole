@@ -1,19 +1,15 @@
 package blackhole.mixin.common.chunk;
 
-import ca.spottedleaf.starlight.common.chunk.ExtendedChunk;
-import ca.spottedleaf.starlight.common.light.SWMRNibbleArray;
-import ca.spottedleaf.starlight.common.light.StarLightEngine;
+import blackhole.common.chunk.ExtendedChunk;
+import blackhole.common.light.SWMRNibbleArray;
+import blackhole.common.light.StarLightEngine;
 import net.minecraft.block.Block;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.palette.UpgradeData;
-import net.minecraft.world.ITickList;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeContainer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.fluids.Fluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -102,7 +98,7 @@ public abstract class WorldChunkMixin implements ExtendedChunk, Chunk {
     )
     public void onConstruct(final World worldIn, final ChunkPos chunkPosIn, final BiomeContainer biomeContainerIn,
                             final UpgradeData upgradeDataIn, final ITickList<Block> tickBlocksIn, final ITickList<Fluid> tickFluidsIn,
-                            final long inhabitedTimeIn, final ChunkSection[] sectionsIn, final Consumer<Chunk> postLoadConsumerIn,
+                            final long inhabitedTimeIn, final ExtendedBlockStorage[] sectionsIn, final Consumer<Chunk> postLoadConsumerIn,
                             final CallbackInfo ci) {
         this.blockNibbles = StarLightEngine.getFilledEmptyLight(worldIn);
         this.skyNibbles = StarLightEngine.getFilledEmptyLight(worldIn);

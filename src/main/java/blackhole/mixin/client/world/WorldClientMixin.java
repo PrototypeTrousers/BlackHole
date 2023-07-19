@@ -1,32 +1,28 @@
 package blackhole.mixin.client.world;
 
-import ca.spottedleaf.starlight.common.light.VariableBlockLightHandler;
-import ca.spottedleaf.starlight.common.world.ExtendedWorld;
-import net.minecraft.client.multiplayer.ClientChunkProvider;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.util.RegistryKey;
+import blackhole.common.light.VariableBlockLightHandler;
+import blackhole.common.world.ExtendedWorld;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.storage.ISpawnWorldInfo;
+import net.minecraft.world.chunk.IChunkProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.function.Supplier;
 
-@Mixin(ClientWorld.class)
-public abstract class ClientWorldMixin extends World implements ExtendedWorld {
+@Mixin(WorldClient.class)
+public abstract class WorldClientMixin extends World implements ExtendedWorld {
 
     @Shadow
-    public abstract ClientChunkProvider getChunkProvider();
+    public abstract IChunkProvider getChunkProvider();
 
     @Unique
     private VariableBlockLightHandler customBlockLightHandler;
 
-    protected ClientWorldMixin(final ISpawnWorldInfo worldInfo, final RegistryKey<World> dimension, final DimensionType dimensionType,
+    protected WorldClientMixin(final ISpawnWorldInfo worldInfo, final RegistryKey<World> dimension, final DimensionType dimensionType,
                                final Supplier<IProfiler> profiler, final boolean isRemote, final boolean isDebug, final long seed) {
         super(worldInfo, dimension, dimensionType, profiler, isRemote, isDebug, seed);
     }
@@ -43,11 +39,11 @@ public abstract class ClientWorldMixin extends World implements ExtendedWorld {
 
     @Override
     public final Chunk getChunkAtImmediately(final int chunkX, final int chunkZ) {
-        return this.getChunkProvider().getChunk(chunkX, chunkZ, false);
+        return this.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
     }
 
     @Override
     public final Chunk getAnyChunkImmediately(int chunkX, int chunkZ) {
-        return this.getChunkProvider().getChunk(chunkX, chunkZ, false);
+        return this.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
     }
 }

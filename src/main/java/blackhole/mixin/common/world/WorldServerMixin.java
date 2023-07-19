@@ -1,41 +1,30 @@
 package blackhole.mixin.common.world;
 
-import ca.spottedleaf.starlight.common.light.VariableBlockLightHandler;
-import ca.spottedleaf.starlight.common.util.CoordinateUtils;
-import ca.spottedleaf.starlight.common.world.ExtendedWorld;
-import com.mojang.datafixers.util.Either;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.util.RegistryKey;
+import blackhole.common.light.VariableBlockLightHandler;
+import blackhole.common.util.CoordinateUtils;
+import blackhole.common.world.ExtendedWorld;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.server.ChunkHolder;
-import net.minecraft.world.server.ChunkManager;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.ISpawnWorldInfo;
+import net.minecraft.world.chunk.IChunkProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.function.Supplier;
-
-@Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends World implements ISeedReader, ExtendedWorld {
+@Mixin(WorldServer.class)
+public abstract class WorldServerMixin extends World implements ISeedReader, ExtendedWorld {
 
     @Unique
     private VariableBlockLightHandler customBlockLightHandler;
 
-    protected ServerWorldMixin(final ISpawnWorldInfo worldInfo, final RegistryKey<World> dimension, final DimensionType dimensionType,
+    protected WorldServerMixin(final ISpawnWorldInfo worldInfo, final RegistryKey<World> dimension, final DimensionType dimensionType,
                                final Supplier<IProfiler> profiler, final boolean isRemote, final boolean isDebug, final long seed) {
         super(worldInfo, dimension, dimensionType, profiler, isRemote, isDebug, seed);
     }
 
     @Shadow
-    public abstract ServerChunkProvider getChunkProvider();
+    public abstract IChunkProvider getChunkProvider();
 
     @Override
     public final VariableBlockLightHandler getCustomLightHandler() {

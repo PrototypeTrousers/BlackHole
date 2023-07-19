@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
 import org.spongepowered.asm.mixin.Mixin;
@@ -126,8 +127,8 @@ public abstract class WorldLightManagerMixin implements ILightListener, StarLigh
      * @author Spottedleaf
      */
     @Overwrite
-    public IWorldLightListener getLightEngine(final LightType lightType) {
-        return lightType == LightType.BLOCK ? this.lightEngine.getBlockReader() : this.lightEngine.getSkyReader();
+    public IWorldLightListener getLightEngine(final EnumSkyBlock lightType) {
+        return lightType == EnumSkyBlock.BLOCK ? this.lightEngine.getBlockReader() : this.lightEngine.getSkyReader();
     }
 
     /**
@@ -135,7 +136,7 @@ public abstract class WorldLightManagerMixin implements ILightListener, StarLigh
      * @author Spottedleaf
      */
     @Overwrite
-    public void setData(final LightType lightType, final SectionPos pos, final NibbleArray nibble,
+    public void setData(final EnumSkyBlock lightType, final SectionPos pos, final NibbleArray nibble,
                         final boolean trustEdges) {
     }
 
@@ -167,7 +168,7 @@ public abstract class WorldLightManagerMixin implements ILightListener, StarLigh
     protected final Long2ObjectOpenHashMap<SWMRNibbleArray[]> skyLightMap = new Long2ObjectOpenHashMap<>();
 
     @Override
-    public void clientUpdateLight(final LightType lightType, SectionPos pos, final @Nullable NibbleArray nibble,
+    public void clientUpdateLight(final EnumSkyBlock lightType, SectionPos pos, final @Nullable NibbleArray nibble,
                                   final boolean trustEdges) {
         if (((Object)this).getClass() != WorldLightManager.class) {
             throw new IllegalStateException("This hook is for the CLIENT ONLY");
@@ -184,7 +185,7 @@ public abstract class WorldLightManagerMixin implements ILightListener, StarLigh
 
                 if (chunk != null) {
                     ((ExtendedChunk)chunk).setBlockNibbles(blockNibbles);
-                    this.lightEngine.getLightAccess().markLightChanged(LightType.BLOCK, pos);
+                    this.lightEngine.getLightAccess().markLightChanged(EnumSkyBlock.BLOCK, pos);
                 }
                 break;
             }
@@ -197,7 +198,7 @@ public abstract class WorldLightManagerMixin implements ILightListener, StarLigh
 
                 if (chunk != null) {
                     ((ExtendedChunk)chunk).setSkyNibbles(skyNibbles);
-                    this.lightEngine.getLightAccess().markLightChanged(LightType.SKY, pos);
+                    this.lightEngine.getLightAccess().markLightChanged(EnumSkyBlock.SKY, pos);
                 }
                 break;
             }

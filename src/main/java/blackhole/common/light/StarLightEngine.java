@@ -1,7 +1,7 @@
 package blackhole.common.light;
 
 import blackhole.common.blockstate.ExtendedAbstractBlockState;
-import blackhole.common.chunk.ExtendedChunkSection;
+import blackhole.common.chunk.ExtendedExtendedBlockStorage;
 import blackhole.common.util.CoordinateUtils;
 import blackhole.common.util.IntegerUtil;
 import blackhole.common.util.SectionPos;
@@ -11,8 +11,10 @@ import blackhole.mixin.common.IExtendedChunkProvider;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.ShortCollection;
 import it.unimi.dsi.fastutil.shorts.ShortIterator;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -57,7 +59,7 @@ public abstract class StarLightEngine {
         public final int x;
         public final int y;
         public final int z;
-        public final Direction nms;
+        public final EnumFacing nms;
         public final long everythingButThisDirection;
         public final long everythingButTheOppositeDirection;
 
@@ -65,7 +67,7 @@ public abstract class StarLightEngine {
             this.x = x;
             this.y = y;
             this.z = z;
-            this.nms = Direction.byLong(x, y, z);
+            this.nms = EnumFacing.getFacingFromVector(x, y, z);
             this.everythingButThisDirection = (long)(ALL_DIRECTIONS_BITSET ^ (1 << this.ordinal()));
             // positive is always even, negative is always odd. Flip the 1 bit to get the negative direction.
             this.everythingButTheOppositeDirection = (long)(ALL_DIRECTIONS_BITSET ^ (1 << (this.ordinal() ^ 1)));
@@ -395,11 +397,11 @@ public abstract class StarLightEngine {
         final ExtendedBlockStorage section = this.sectionCache[(worldX >> 4) + 5 * (worldZ >> 4) + (5 * 5) * (worldY >> 4) + this.chunkSectionIndexOffset];
 
         if (section != null) {
-            return section == EMPTY_CHUNK_SECTION ? ExtendedChunkSection.BLOCK_IS_TRANSPARENT :
-                    ((ExtendedChunkSection)section).getKnownTransparency((worldY & 15) | ((worldX & 15) << 4) | ((worldZ & 15) << 8));
+            return section == EMPTY_CHUNK_SECTION ? ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT :
+                    ((ExtendedExtendedBlockStorage)section).getKnownTransparency((worldY & 15) | ((worldX & 15) << 4) | ((worldZ & 15) << 8));
         }
 
-        return ExtendedChunkSection.BLOCK_IS_TRANSPARENT;
+        return ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT;
     }
 
     // warn: localIndex = y | (x << 4) | (z << 8)
@@ -407,10 +409,10 @@ public abstract class StarLightEngine {
         final ExtendedBlockStorage section = this.sectionCache[sectionIndex];
 
         if (section != null) {
-            return section == EMPTY_CHUNK_SECTION ? ExtendedChunkSection.BLOCK_IS_TRANSPARENT : ((ExtendedChunkSection)section).getKnownTransparency(localIndex);
+            return section == EMPTY_CHUNK_SECTION ? ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT : ((ExtendedExtendedBlockStorage)section).getKnownTransparency(localIndex);
         }
 
-        return ExtendedChunkSection.BLOCK_IS_TRANSPARENT;
+        return ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT;
     }
 
     /**
@@ -1207,9 +1209,10 @@ public abstract class StarLightEngine {
                         this.mutablePos1.setPos(offX, offY, offZ);
                         long flags = 0;
                         if (((ExtendedAbstractBlockState)blockState).isConditionallyFullOpaque()) {
-                            final VoxelShape cullingFace = blockState.getFaceOcclusionShape(world, this.mutablePos1, propagate.getOpposite().nms);
-
-                            if (VoxelShapes.faceShapeCovers(VoxelShapes.empty(), cullingFace)) {
+                            BlockFaceShape cullingFace = blockState.getBlockFaceShape(world, this.mutablePos1, propagate.getOpposite().nms);
+                            //final VoxelShape cullingFace = blockState.getFaceOcclusionShape(world, this.mutablePos1, propagate.getOpposite().nms);
+                            if (cullingFace == BlockFaceShape.SOLID) {
+                            //if (VoxelShapes.faceShapeCovers(VoxelShapes.empty(), cullingFace)) {
                                 continue;
                             }
                             flags |= FLAG_HAS_SIDED_TRANSPARENT_BLOCKS;

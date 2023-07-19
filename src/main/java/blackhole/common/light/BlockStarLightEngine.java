@@ -2,7 +2,7 @@ package blackhole.common.light;
 
 import blackhole.common.blockstate.ExtendedAbstractBlockState;
 import blackhole.common.chunk.ExtendedChunk;
-import blackhole.common.chunk.ExtendedChunkSection;
+import blackhole.common.chunk.ExtendedExtendedBlockStorage;
 import blackhole.common.world.ExtendedWorld;
 import blackhole.mixin.common.IExtendedChunkProvider;
 import net.minecraft.block.state.IBlockState;
@@ -12,7 +12,6 @@ import net.minecraft.world.chunk.*;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class BlockStarLightEngine extends StarLightEngine {
 
@@ -168,7 +167,7 @@ public final class BlockStarLightEngine extends StarLightEngine {
 
             final long neighbourOpacity = this.getKnownTransparency(sectionIndex, (offY & 15) | ((offX & 15) << 4) | ((offZ & 15) << 8));
 
-            if (neighbourOpacity == ExtendedChunkSection.BLOCK_SPECIAL_TRANSPARENCY) {
+            if (neighbourOpacity == ExtendedExtendedBlockStorage.BLOCK_SPECIAL_TRANSPARENCY) {
                 // here the block can be conditionally opaque (i.e light cannot propagate from it), so we need to test that
                 // we don't read the blockstate because most of the time this is false, so using the faster
                 // known transparency lookup results in a net win
@@ -204,57 +203,43 @@ public final class BlockStarLightEngine extends StarLightEngine {
     }
 
     protected Iterator<BlockPos> getSources(final IExtendedChunkProvider lightAccess, final Chunk chunk) {
-        if (chunk instanceof ChunkPrimerWrapper || chunk instanceof Chunk) {
-            // implementation on Chunk is pretty awful, so write our own here. The big optimisation is
-            // skipping empty sections, and the far more optimised reading of types.
-            List<BlockPos> sources = new ArrayList<>();
+        // implementation on Chunk is pretty awful, so write our own here. The big optimisation is
+        // skipping empty sections, and the far more optimised reading of types.
+        List<BlockPos> sources = new ArrayList<>();
 
-            int offX = chunk.getPos().x << 4;
-            int offZ = chunk.getPos().z << 4;
+        int offX = chunk.getPos().x << 4;
+        int offZ = chunk.getPos().z << 4;
 
-            final ExtendedBlockStorage[] sections = chunk.getBlockStorageArray();
-            for (int sectionY = this.minSection; sectionY <= this.maxSection; ++sectionY) {
-                final ExtendedBlockStorage section = sections[sectionY - this.minSection];
-                if (section == null || section.isEmpty()) {
-                    // no sources in empty sections
+        final ExtendedBlockStorage[] sections = chunk.getBlockStorageArray();
+        for (int sectionY = this.minSection; sectionY <= this.maxSection; ++sectionY) {
+            final ExtendedBlockStorage section = sections[sectionY - this.minSection];
+            if (section == null || section.isEmpty()) {
+                // no sources in empty sections
+                continue;
+            }
+            final BlockStateContainer states = section.getData();
+            final int offY = sectionY << 4;
+
+            for (int index = 0; index < (16 * 16 * 16); ++index) {
+                final IBlockState state = states.get(index);
+                if (state.getLightValue() <= 0) {
                     continue;
                 }
-                final BlockStateContainer states = section.getData();
-                final int offY = sectionY << 4;
 
-                for (int index = 0; index < (16 * 16 * 16); ++index) {
-                    final IBlockState state = states.get(index);
-                    if (state.getLightValue() <= 0) {
-                        continue;
-                    }
-
-                    // index = x | (z << 4) | (y << 8)
-                    sources.add(new BlockPos(offX | (index & 15), offY | (index >>> 8), offZ | ((index >>> 4) & 15)));
-                }
-            }
-
-            final VariableBlockLightHandler customBlockHandler = ((ExtendedWorld)lightAccess.getWorld()).getCustomLightHandler();
-            if (customBlockHandler == null) {
-                return sources.iterator();
-            }
-
-            final Set<BlockPos> ret = new HashSet<>(sources);
-            ret.addAll(customBlockHandler.getCustomLightPositions(chunk.getPos().x, chunk.getPos().z));
-
-            return ret.iterator();
-        } else {
-            // world gen and lighting run in parallel, and if lighting keeps up it can be lighting chunks that are
-            // being generated. In the nether, lava will add a lot of sources. This resulted in quite a few CME crashes.
-            // So all we do spinloop until we can collect a list of sources, and even if it is out of date we will pick up
-            // the missing sources from checkBlock.
-            for (;;) {
-                try {
-                    return chunk.getLightSources().collect(Collectors.toList()).iterator();
-                } catch (final Exception cme) {
-                    continue;
-                }
+                // index = x | (z << 4) | (y << 8)
+                sources.add(new BlockPos(offX | (index & 15), offY | (index >>> 8), offZ | ((index >>> 4) & 15)));
             }
         }
+
+        final VariableBlockLightHandler customBlockHandler = ((ExtendedWorld) lightAccess.getWorld()).getCustomLightHandler();
+        if (customBlockHandler == null) {
+            return sources.iterator();
+        }
+
+        final Set<BlockPos> ret = new HashSet<>(sources);
+        ret.addAll(customBlockHandler.getCustomLightPositions(chunk.getPos().x, chunk.getPos().z));
+
+        return ret.iterator();
     }
 
     @Override

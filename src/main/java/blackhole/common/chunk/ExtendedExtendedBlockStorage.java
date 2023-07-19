@@ -1,6 +1,6 @@
 package blackhole.common.chunk;
 
-public interface ExtendedChunkSection {
+public interface ExtendedExtendedBlockStorage {
 
     public static final long BLOCK_IS_TRANSPARENT = 0b00;
     public static final long BLOCK_IS_FULL_OPAQUE = 0b01;

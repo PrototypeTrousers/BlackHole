@@ -219,7 +219,6 @@ public final class StarLightInterface {
     public boolean isClientSide() {
         return this.isClientSide;
     }
-    NibbleArray getData
     public Chunk getAnyChunkNow(final int chunkX, final int chunkZ) {
         if (this.world == null) {
             // empty world

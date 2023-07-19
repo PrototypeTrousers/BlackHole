@@ -2,7 +2,7 @@ package blackhole.common.light;
 
 import blackhole.common.blockstate.ExtendedAbstractBlockState;
 import blackhole.common.chunk.ExtendedChunk;
-import blackhole.common.chunk.ExtendedChunkSection;
+import blackhole.common.chunk.ExtendedExtendedBlockStorage;
 import blackhole.common.util.WorldUtil;
 import blackhole.mixin.common.IExtendedChunkProvider;
 import it.unimi.dsi.fastutil.shorts.ShortCollection;
@@ -13,7 +13,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import java.util.Arrays;
@@ -304,13 +303,13 @@ public final class SkyStarLightEngine extends StarLightEngine {
         final int opacity;
         final IBlockState conditionallyOpaqueState;
         switch ((int)this.getKnownTransparency(worldX, worldY, worldZ)) {
-            case (int) ExtendedChunkSection.BLOCK_IS_TRANSPARENT:
+            case (int) ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT:
                 opacity = 1;
                 conditionallyOpaqueState = null;
                 break;
-            case (int)ExtendedChunkSection.BLOCK_IS_FULL_OPAQUE:
+            case (int) ExtendedExtendedBlockStorage.BLOCK_IS_FULL_OPAQUE:
                 return 0;
-            case (int)ExtendedChunkSection.BLOCK_UNKNOWN_TRANSPARENCY:
+            case (int) ExtendedExtendedBlockStorage.BLOCK_UNKNOWN_TRANSPARENCY:
                 opacity = Math.max(1, ((ExtendedAbstractBlockState)this.getBlockState(worldX, worldY, worldZ)).getOpacityIfCached());
                 conditionallyOpaqueState = null;
                 if (opacity >= 15) {
@@ -318,7 +317,7 @@ public final class SkyStarLightEngine extends StarLightEngine {
                 }
                 break;
             // variable opacity | conditionally full opaque
-            case (int)ExtendedChunkSection.BLOCK_SPECIAL_TRANSPARENCY:
+            case (int) ExtendedExtendedBlockStorage.BLOCK_SPECIAL_TRANSPARENCY:
             default:
                 this.recalcCenterPos.setPos(worldX, worldY, worldZ);
                 final IBlockState state = this.getBlockState(worldX, worldY, worldZ);
@@ -348,7 +347,7 @@ public final class SkyStarLightEngine extends StarLightEngine {
 
             final long neighbourOpacity = this.getKnownTransparency(sectionIndex, (offY & 15) | ((offX & 15) << 4) | ((offZ & 15) << 8));
 
-            if (neighbourOpacity == ExtendedChunkSection.BLOCK_SPECIAL_TRANSPARENCY) {
+            if (neighbourOpacity == ExtendedExtendedBlockStorage.BLOCK_SPECIAL_TRANSPARENCY) {
                 // here the block can be conditionally opaque (i.e light cannot propagate from it), so we need to test that
                 // we don't read the blockstate because most of the time this is false, so using the faster
                 // known transparency lookup results in a net win
@@ -578,7 +577,7 @@ public final class SkyStarLightEngine extends StarLightEngine {
                         // ensure the section below is always checked
                         this.checkNullSection(currX >> 4, sectionY - 1, currZ >> 4, false);
 
-                        final long bitset = ((ExtendedChunkSection)section).getBitsetForColumn(currX & 15, currZ & 15);
+                        final long bitset = ((ExtendedExtendedBlockStorage)section).getBitsetForColumn(currX & 15, currZ & 15);
                         if (bitset == 0) {
                             continue;
                         }

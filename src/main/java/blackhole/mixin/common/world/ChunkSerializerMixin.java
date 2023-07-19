@@ -1,19 +1,14 @@
 package blackhole.mixin.common.world;
 
-import ca.spottedleaf.starlight.common.chunk.ExtendedChunk;
-import ca.spottedleaf.starlight.common.light.SWMRNibbleArray;
-import ca.spottedleaf.starlight.common.light.StarLightEngine;
-import ca.spottedleaf.starlight.common.util.WorldUtil;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import blackhole.common.chunk.ExtendedChunk;
+import blackhole.common.light.SWMRNibbleArray;
+import blackhole.common.light.StarLightEngine;
+import blackhole.common.util.WorldUtil;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.village.PointOfInterestManager;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.chunk.storage.ChunkSerializer;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -156,7 +151,7 @@ public abstract class ChunkSerializerMixin {
             LOGGER.warn("Failed to load light for chunk " + pos + ", light will be recalculated", ex);
         }
     }
-    private static void loadLightHookReal(final ServerWorld world, final TemplateManager structureManager, final PointOfInterestManager poiStorage,
+    private static void loadLightHookReal(final WorldServer world, final TemplateManager structureManager, final PointOfInterestManager poiStorage,
                                           final ChunkPos pos, final CompoundNBT tag, final CallbackInfoReturnable<ChunkPrimer> cir) {
         final int minSection = WorldUtil.getMinLightSection(world);
         final int maxSection = WorldUtil.getMaxLightSection(world);

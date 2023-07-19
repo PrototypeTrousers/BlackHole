@@ -1,12 +1,11 @@
 package blackhole.mixin.common.chunk;
 
-import ca.spottedleaf.starlight.common.blockstate.ExtendedAbstractBlockState;
-import ca.spottedleaf.starlight.common.chunk.ExtendedChunkSection;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.palette.PalettedContainer;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import blackhole.common.blockstate.ExtendedAbstractBlockState;
+import blackhole.common.chunk.ExtendedExtendedBlockStorage;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,12 +15,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ChunkSection.class)
-public abstract class ChunkSectionMixin implements ExtendedChunkSection {
+@Mixin(ExtendedBlockStorage.class)
+public abstract class ExtendedBlockStorageMixin implements ExtendedExtendedBlockStorage {
 
     @Final
     @Shadow
-    public PalettedContainer<BlockState> data;
+    public ExtendedBlockStorage data;
 
     @Unique
     protected int transparentBlockCount;
@@ -30,17 +29,17 @@ public abstract class ChunkSectionMixin implements ExtendedChunkSection {
     private final long[] knownBlockTransparencies = new long[16 * 16 * 16 * 2 / Long.SIZE]; // blocks * bits per block / bits per long
 
     @Unique
-    private static long getKnownTransparency(final BlockState state) {
+    private static long getKnownTransparency(final IBlockState state) {
         final int opacityIfCached = ((ExtendedAbstractBlockState)state).getOpacityIfCached();
 
         if (opacityIfCached == 0) {
-            return ExtendedChunkSection.BLOCK_IS_TRANSPARENT;
+            return ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT;
         }
         if (opacityIfCached == 15) {
-            return ExtendedChunkSection.BLOCK_IS_FULL_OPAQUE;
+            return ExtendedExtendedBlockStorage.BLOCK_IS_FULL_OPAQUE;
         }
 
-        return opacityIfCached == -1 ? ExtendedChunkSection.BLOCK_SPECIAL_TRANSPARENCY : ExtendedChunkSection.BLOCK_UNKNOWN_TRANSPARENCY;
+        return opacityIfCached == -1 ? ExtendedExtendedBlockStorage.BLOCK_SPECIAL_TRANSPARENCY : ExtendedExtendedBlockStorage.BLOCK_UNKNOWN_TRANSPARENCY;
     }
 
     /* NOTE: Index is y | (x << 4) | (z << 8) */
@@ -64,7 +63,7 @@ public abstract class ChunkSectionMixin implements ExtendedChunkSection {
             for (int z = 0; z <= 15; ++z) {
                 for (int x = 0; x <= 15; ++x) {
                     final long transparency = getKnownTransparency(this.data.get(x, y, z));
-                    if (transparency == ExtendedChunkSection.BLOCK_IS_TRANSPARENT) {
+                    if (transparency == ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT) {
                         ++this.transparentBlockCount;
                     }
                     this.updateTransparencyInfo(y | (x << 4) | (z << 8), transparency);
@@ -89,7 +88,8 @@ public abstract class ChunkSectionMixin implements ExtendedChunkSection {
      * Callback used to initialise the transparency data clientside. This is only for the client side as
      * calculateCounts is called server side, and fromPacket is only used clientside.
      */
-    @OnlyIn(Dist.CLIENT)
+
+    @SideOnly(Side.CLIENT)
     @Inject(
             method = "read",
             at = @At("RETURN")
@@ -105,16 +105,16 @@ public abstract class ChunkSectionMixin implements ExtendedChunkSection {
             method = "setBlockState(IIILnet/minecraft/block/BlockState;Z)Lnet/minecraft/block/BlockState;",
             at = @At("RETURN")
     )
-    private void updateBlockCallback(final int x, final int y, final int z, final BlockState state, final boolean lock,
-                                     final CallbackInfoReturnable<BlockState> cir) {
-        final BlockState oldState = cir.getReturnValue();
+    private void updateBlockCallback(final int x, final int y, final int z, final IBlockState state, final boolean lock,
+                                     final CallbackInfoReturnable<IBlockState> cir) {
+        final IBlockState oldState = cir.getReturnValue();
         final long oldTransparency = getKnownTransparency(oldState);
         final long newTransparency = getKnownTransparency(state);
 
-        if (oldTransparency == ExtendedChunkSection.BLOCK_IS_TRANSPARENT) {
+        if (oldTransparency == ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT) {
             --this.transparentBlockCount;
         }
-        if (newTransparency == ExtendedChunkSection.BLOCK_IS_TRANSPARENT) {
+        if (newTransparency == ExtendedExtendedBlockStorage.BLOCK_IS_TRANSPARENT) {
             ++this.transparentBlockCount;
         }
 

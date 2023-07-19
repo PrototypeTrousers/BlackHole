@@ -1,16 +1,13 @@
 package blackhole.mixin.common.chunk;
 
-import ca.spottedleaf.starlight.common.chunk.ExtendedChunk;
-import ca.spottedleaf.starlight.common.light.SWMRNibbleArray;
-import ca.spottedleaf.starlight.common.light.StarLightEngine;
+import blackhole.common.chunk.ExtendedChunk;
+import blackhole.common.light.SWMRNibbleArray;
+import blackhole.common.light.StarLightEngine;
 import net.minecraft.block.Block;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.palette.UpgradeData;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.ChunkPrimerTickList;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.fluids.Fluid;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChunkPrimer.class)
-public abstract class ChunkPrimerMixin implements IChunk, ExtendedChunk {
+public abstract class ChunkPrimerMixin implements ExtendedChunk {
 
     @Unique
     private volatile SWMRNibbleArray[] blockNibbles;
@@ -80,7 +77,7 @@ public abstract class ChunkPrimerMixin implements IChunk, ExtendedChunk {
             method = "<init>(Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/util/palette/UpgradeData;[Lnet/minecraft/world/chunk/ChunkSection;Lnet/minecraft/world/chunk/ChunkPrimerTickList;Lnet/minecraft/world/chunk/ChunkPrimerTickList;)V",
             at = @At("TAIL")
     )
-    public void onConstruct(final ChunkPos pos, final UpgradeData upgradeData, final ChunkSection[] sections,
+    public void onConstruct(final ChunkPos pos, final UpgradeData upgradeData, final ExtendedBlockStorage[] sections,
                             final ChunkPrimerTickList<Block> pendingBlockTicks, final ChunkPrimerTickList<Fluid> pendingFluidTicks,
                             final CallbackInfo ci) {
         this.blockNibbles = StarLightEngine.getFilledEmptyLight();

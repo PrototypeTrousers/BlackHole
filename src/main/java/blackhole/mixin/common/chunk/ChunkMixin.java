@@ -1,8 +1,8 @@
 package blackhole.mixin.common.chunk;
 
-import ca.spottedleaf.starlight.common.chunk.ExtendedChunk;
-import net.minecraft.world.chunk.IChunk;
+import blackhole.common.chunk.ExtendedChunk;
+import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(IChunk.class)
+@Mixin(Chunk.class)
 public interface ChunkMixin extends ExtendedChunk {}
